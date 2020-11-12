@@ -1,0 +1,6 @@
+.idea/
+data/
+templates/
+venv/
+*.pyc*
+main.py
