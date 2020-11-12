@@ -4,16 +4,14 @@ pptx-template-data-feeder
 
 This library lets you feed data to pptx-template.
 
-These next two sections come directly from pptx-template, showing how one would 'feed data'.
+Examples
+--------
 
-Text substitution
------------------
+1 output, static data in model
+------------------------------
+This example shows static data usage in the model.  The static data here that will be templated on pptx is "How are you?", "Hello!", and "XNDIEDNEF".  This example is just like that in pptx-template.
 
-The first example in the pptx-template project page is::
-
-    $ pptx-template --template template.pptx --model model.json --out out.pptx
-
-The model.json file that looks like this::
+model.json::
 
     {
         "slides": [
@@ -29,45 +27,69 @@ The model.json file that looks like this::
         ]
     }
 
-As you can see, this data is fixed.  But...what if we want the data in model.json to be dynamic?  If it were dynamic, then we could create multiple out.pptx files rather than one, all displaying different data.  We can change our model.json file to this::
+::
 
+    $ pptx-template-data-feeder --template template.pptx --model model.json --output output.json
 
-    {% for row in rows %}
-    {
-        "slides": [
-            {
-                "hello": {
-                    "en": [
-                    "{{row.greeting1}}",
-                    "{{row.greeting2}}"
-                    ],
-                    "ja": "{{row.greeting3}}"
-                }
-            }
-        ]
-    }
-    {% endfor %}
+1+ output, 1 dataset
+--------------------
+This example shows dynamic data usage in the model and extends from the first example in the pptx-template documentation.  The number of output in this case is the number of rows of data in data.csv.
 
-This is not a standard .json file but don't fret, jinja will template properly.  We need a way to pick up greeting1, greeting2 and greeting3.  Suppose we have a greetings.csv file that looks like this::
+data.csv::
 
     greeting1,greeting2,greeting3
     "How are you?","Hello","XNDIEDNEF"
     "Well, thanks", "Good Bye", "NVINOE"
 
-Now we can use pptx-template-data-feeder to create the two output.pptx files::
+model.json::
 
-    $ pptx-template-data-feeder --template template.pptx --model model.json --data greetings.csv --out out.pptx
+    {
+        "slides": [
+            {
+                "hello": {
+                    "en": [
+                    "{{elem.greeting1}}",
+                    "{{elem.greeting2}}"
+                    ],
+                    "ja": "{{elem.greeting3}}"
+                }
+            }
+        ]
+    }
 
-output.pptx will be enumerated this time simply by each row in the greetings.csv file: output-0.pptx, output-1.pptx.
+::
 
-CSV Import
-----------
+    $ pptx-template-data-feeder --template template.pptx --model model.json --output "output{{:}}.pptx" --data data.csv
 
-Second example::
+iterate through data & model.  csv data will always be converted to list of dicts.
+so, model should always contain row as a global variable???::
 
-    $ pptx-template --template template.pptx --model model.json --out out.pptx
+    from jinja2 import Template
+    template = Template("model.json")
+    for row in data:
+        template.render(elem=row)
 
-The model.json file in the second example of the pptx-template project page looks like this::
+pptx-template-data-feeder will represent data.csv internally in Python as a list of dictionaries::
+
+    data = [{'greeting1': 'How are you?", 'greeting2': 'Hello', 'greeting': 'XNDIEDNEF'}, ...]
+
+By specifying the jinja template in the output, we are able to create separate output pptx files. If we had only wanted the first output, we could do --output "output{{0}}.pptx".
+
+
+1 output, static data in model
+------------------------------
+
+This example replicates the second example from pptx-template.  Accomplishing static data is exactly like in pptx-template.
+
+data.csv::
+
+    Year,Sales,Cost,ROI
+    1Q,90,45,0.5
+    2Q,100,50,0.5
+    3Q,60,20,0.33
+    4Q,80,60,0.75
+
+model.json (1)::
 
     {
         "slides": [
@@ -77,33 +99,37 @@ The model.json file in the second example of the pptx-template project page look
         ]
     }
 
-pptx-template internally expects to find a data.csv file that looks like this::
+OR model.json (2)::
 
-    Year,Sales,Cost,ROI
-    1Q,90,45,0.5
-    2Q,100,50,0.5
-    3Q,60,20,0.33
-    4Q,80,60,0.75
-
-The way to make a workflow out of this (because your data is dynamic of course), is to change you model.json to this::
-
-        {
+    {
         "slides": [
         {
-            "{{data}}": {}
+            "data": {"file_name": "data.csv"}
         }
         ]
-
     }
 
-We need a way to set up {{data}} properly.  Let's create {{data}}.csv (yes include the double brackets)::
+OR model.json (3)::
 
-    Year,Sales,Cost,ROI
-    {% for row in rows %}
-        {{row.Year}},{{row.Sales}},{{row.Cost}},{{row.ROI}}
-    {% endfor %}
+    {
+        "slides": [
+        {
+            "data": {"body": "Year,Sales,Cost,ROI\n1Q,90,45,0.5\n3Q,60,20,0.33\n4Q,80,60,0.75"}
+        }
+        ]
+    }
 
-Finally, we need the actual csv data files, call them sales-data1.csv & sales-data2.csv::
+::
+
+    $ pptx-template-data-feeder --template template.pptx --model model.json --output output.pptx
+
+
+1 output, 1+ dataset
+--------------------
+
+This example accomplishes the same as above, in a slightly different way.  We cannot use model.json (1) above.  It cannot be templated.
+
+data1.csv::
 
     Year,Sales,Cost,ROI
     1Q,90,45,0.5
@@ -111,21 +137,78 @@ Finally, we need the actual csv data files, call them sales-data1.csv & sales-da
     3Q,60,20,0.33
     4Q,80,60,0.75
 
-And::
+data2.csv::
 
     Year,Sales,Cost,ROI
-    10Q,900,450,0.05
-    20Q,1000,500,0.05
-    30Q,600,200,0.033
-    40Q,800,600,0.075
-
-Our pptx-template-data-feeder call will look like this::
-
-    $ pptx-template-data-feeder --template template.pptx --model model.json --data-template {{data}}.csv --data sales-data1.csv --data sales-data2.csv --out out.pptx
-
-Or we can provide a data directory (containing the csv files)::
-
-    $ pptx-template-data-feeder --template template.pptx --model model.json --data-template {{data}}.csv --data-directory /path/to/sales/data --out out.pptx
+    1Q,90,45,0.5
+    2Q,100,50,0.5
+    3Q,60,20,0.33
+    4Q,80,60,0.75
 
 
-out.pptx this time will be: out-sales-data1.pptx & out-sales-data2.pptx
+In this example we will template from model.json (2).
+
+model.json::
+
+    {
+        "slides": [
+        {
+            "data": {"file_name": "{{elem.dataset}}"}
+        }
+        ]
+    }
+
+datasets.csv::
+
+    dataset
+    data1.csv
+    data2.csv
+
+::
+
+    $ pptx-template-data-feeder --template template.pptx --model model.json --output output{{:}}.pptx --data datasets.csv
+
+
+Now, we will show how to use with with model.json (3).
+
+model.json::
+
+    // in this case, elem is actually a list
+    {
+        "slides": [
+        {
+
+            "data": {"body": "{{elem|join(',')}}\n{% for row in elem %}{{row|join(',')}}{% endfor %}"}
+        }
+        ]
+    }
+
+data.csv::
+
+    i,Year,Sales,Cost,ROI
+    0,1Q,90,45,0.5
+    0,2Q,100,50,0.5
+    0,3Q,60,20,0.33
+    0,4Q,80,60,0.75
+    1,1Q,90,45,0.5
+    1,2Q,100,50,0.5
+    1,3Q,60,20,0.33
+    1,4Q,80,60,0.75
+
+Internal representation of data.csv is::
+
+    data = [
+    [{'Year': 1Q, 'Sales': 90, 'Cost': 45, 'ROI': 0.5}, ...],
+    [{'Year': 1Q, 'Sales': 90, 'Cost', 45, 'ROI': 0.5}, ...]
+    ]
+
+    from jinja2 import Template
+    template = Template("model.json")
+    for row in data:
+        template.render(elem=row)
+
+::
+
+    $ pptx-template-data-feeder --template template.pptx --model model.json --output output{{:}}.pptx --data data.csv, --dataset-index i
+
+
