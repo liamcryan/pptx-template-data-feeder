@@ -7,6 +7,8 @@ This library lets you feed data to pptx-template.
 Examples
 --------
 
+These examples come from the Text Substitution & CSV Import examples here: https://github.com/m3dev/pptx-template/blob/master/README.md
+
 1 output, static data in model
 ------------------------------
 This example shows static data usage in the model.  The static data here that will be templated on pptx is "How are you?", "Hello!", and "XNDIEDNEF".  This example is just like that in pptx-template.
@@ -29,10 +31,12 @@ model.json::
 
 ::
 
+    $ pptx-template --template template.pptx --model model.json --output output.json
+    OR
     $ pptx-template-data-feeder --template template.pptx --model model.json --output output.json
 
-1+ output, 1 dataset
---------------------
+data feeder! 1+ output, 1 dataset
+---------------------------------
 This example shows dynamic data usage in the model and extends from the first example in the pptx-template documentation.  The number of output in this case is the number of rows of data in data.csv.
 
 data.csv::
@@ -62,7 +66,7 @@ model.json::
     $ pptx-template-data-feeder --template template.pptx --model model.json --output "output{{:}}.pptx" --data data.csv
 
 iterate through data & model.  csv data will always be converted to list of dicts.
-so, model should always contain row as a global variable???::
+so, here is the basic idea for the internals::
 
     from jinja2 import Template
     template = Template("model.json")
@@ -121,11 +125,13 @@ OR model.json (3)::
 
 ::
 
+    $ pptx-template --template template.pptx --model model.json --output output.pptx
+    OR
     $ pptx-template-data-feeder --template template.pptx --model model.json --output output.pptx
 
 
-1+ output, 1+ dataset
----------------------
+data feeder! 1+ output, 1+ dataset
+----------------------------------
 
 This example accomplishes the same as above, in a slightly different way.  We cannot use model.json (1) above.  It cannot be templated.
 
@@ -173,7 +179,6 @@ Now, we will show how to use with with model.json (3).
 
 model.json::
 
-    // in this case, elem is actually a list
     {
         "slides": [
         {
