@@ -124,8 +124,8 @@ OR model.json (3)::
     $ pptx-template-data-feeder --template template.pptx --model model.json --output output.pptx
 
 
-1 output, 1+ dataset
---------------------
+1+ output, 1+ dataset
+---------------------
 
 This example accomplishes the same as above, in a slightly different way.  We cannot use model.json (1) above.  It cannot be templated.
 
