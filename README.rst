@@ -31,21 +31,24 @@ The model.json file that looks like this::
 
 As you can see, this data is fixed.  But...what if we want the data in model.json to be dynamic?  If it were dynamic, then we could create multiple out.pptx files rather than one, all displaying different data.  We can change our model.json file to this::
 
+
+    {% for row in rows %}
     {
         "slides": [
             {
                 "hello": {
                     "en": [
-                    "{{greeting_1}}",
-                    "{{greeting_2}}"
+                    "{{row.greeting1}}",
+                    "{{row.greeting2}}"
                     ],
-                    "ja": "{{greeting_3}}"
+                    "ja": "{{row.greeting3}}"
                 }
             }
         ]
     }
+    {% endfor %}
 
-So now we need a way to pick up greeting_1, greeting_2 and greeting_3.  Suppose we have a greetings.csv file that looks like this::
+This is not a standard .json file but don't fret, jinja will template properly.  We need a way to pick up greeting1, greeting2 and greeting3.  Suppose we have a greetings.csv file that looks like this::
 
     greeting1,greeting2,greeting3
     "How are you?","Hello","XNDIEDNEF"
