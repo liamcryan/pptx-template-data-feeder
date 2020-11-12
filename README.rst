@@ -98,7 +98,7 @@ We need a way to set up {{data}} properly.  Let's create {{data}}.csv (yes inclu
     Year,Sales,Cost,ROI
     {% for row in rows %}
         {{row.Year}},{{row.Sales}},{{row.Cost}},{{row.ROI}}
-    {% endata-feederor %}
+    {% endfor %}
 
 Finally, we need the actual csv data files, call them sales-data1.csv & sales-data2.csv::
 
