@@ -52,4 +52,4 @@ The 'data' in {{data.greeting_en}} is globally available to the templating engin
 
 ::
 
-    %pptx-templater --template template.pptx --out out.pptx --model-template model.json
+    %pptx-templater --template template.pptx --out out.pptx --model-template model.json --data data.csv
