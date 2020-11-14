@@ -1,6 +1,9 @@
 .idea/
-data/
-templates/
 venv/
 *.pyc*
-main.py
+*.egg-info
+examples/baseline
+examples/prepost
+examples/upwork.sh
+examples/pptx-template/out.pptx
+examples/pptx-template-jinja/out*
