@@ -28,11 +28,6 @@ def get_csv_data_file(filename):
     return data
 
 
-DEFAULT_TEMPLATE = 'template.pptx'
-DEFAULT_MODEL_TEMPLATE = 'model.json'
-DEFAULT_DATA = 'data.csv'
-
-
 @click.command()
 @click.option('--template', nargs=1, type=click.Path(exists=True), help='template pptx file (required)')
 @click.option('--model-template', nargs=1, type=click.Path(exists=True),
