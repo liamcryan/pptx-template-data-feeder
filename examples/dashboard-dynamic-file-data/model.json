@@ -1,0 +1,25 @@
+{
+  "slides": {
+    "0": {
+      "donut": {
+        "file_name": "{{data.donut}}.csv"
+      },
+      "clustered_bar": {
+        "file_name": "{{data.clustered}}"
+      },
+      "100_bar": {
+        "file_name": "{{data.bar}}"
+      }
+    },
+    "1": {
+      "line": {
+        "file_name": "{{data.line}}"
+      }
+    },
+    "2": {
+      "area": {
+        "file_name": "{{data.area}}"
+      }
+    }
+  }
+}

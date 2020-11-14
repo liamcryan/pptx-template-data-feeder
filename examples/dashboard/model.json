@@ -1,0 +1,25 @@
+{
+  "slides": {
+    "0": {
+      "donut": {
+        "file_name": "donut-data.csv"
+      },
+      "clustered_bar": {
+        "file_name": "clustered-bar-data.csv"
+      },
+      "100_bar": {
+        "file_name": "100-bar-data.csv"
+      }
+    },
+    "1": {
+      "line": {
+        "file_name": "line-data.csv"
+      }
+    },
+    "2": {
+      "area": {
+        "file_name": "area-data.csv"
+      }
+    }
+  }
+}

@@ -1,0 +1,3 @@
+donut,clustered,bar,line,area
+donut-data.csv,clustered-bar-data.csv,100-bar-data.csv,line-data.csv,area-data.csv
+donut-data2.csv,clustered-bar-data2.csv,100-bar-data2.csv,line-data2.csv,area-data2.csv

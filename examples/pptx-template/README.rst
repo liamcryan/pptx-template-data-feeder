@@ -4,7 +4,7 @@ pptx-template example
 
 This example shows how to replicate (with pptx-templater), the output from the pptx-template test here: https://github.com/m3dev/pptx-template/tree/master/test/data
 
-In the terminal type::
+In the terminal, cd to this directory, then::
 
     %pptx-templater --template in.pptx --model-template model.json --out out.pptx
 

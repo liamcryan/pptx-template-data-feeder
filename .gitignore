@@ -5,4 +5,4 @@ venv/
 examples/baseline
 examples/prepost
 examples/upwork.sh
-examples/pptx-template*/out*
+examples/*/out*
