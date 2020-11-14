@@ -6,7 +6,7 @@ This example shows how to replicate (with pptx-templater), the output from the p
 
 In the terminal type::
 
-    %pptx-templater --template in.pptx --model-template model.json --out out.pptx --data data.csv
+    %pptx-templater --template in.pptx --model-template model.json --out out.pptx
 
 Note you could have used pptx-template instead::
 
