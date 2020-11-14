@@ -19,15 +19,11 @@ A typical pptx-template model might look like this (model.json)::
 
     }
 
-    %pptx-template --template template.pptx
-
 ::
 
     %pptx-template --template template.pptx --out out.pptx --model model.json
 
 Instead of specifying the fixed greetings within the model.json, we want to have a while file of greetings and create an output pptx for each one.  This is very useful when you have multiple reports to be created with the same pptx template.
-
-
 
 A pptx-templater model (model.json)::
 
