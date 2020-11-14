@@ -53,3 +53,13 @@ The 'data' in {{data.greeting_en}} is globally available to the templating engin
 ::
 
     %pptx-templater --template template.pptx --out out.pptx --model-template model.json --data data.csv
+
+
+Getting started -> Python installation::
+
+    %pip install git+https://github.com/liamcryan/pptx-templater.git
+
+Now you are able to use the command line tool::
+
+    %pptx-templater
+
