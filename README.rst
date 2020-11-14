@@ -46,7 +46,9 @@ Also needed is the data file (data.csv)::
 
 Please excuse my Japanese, ハウディ came from https://translate.google.com/#view=home&op=translate&sl=auto&tl=ja&text=Howdy
 
-In the model.json, the {{data.greeting_en}} tells the jinja2 templating engine (https://jinja.palletsprojects.com/en/2.11.x/) to template the greeting_en column in the data.csv (the 'data' in {{data.greeting_en}} is globally available to the templating engine, and should always be included prior to the column you wish to access => {{data.column}}).
+In the model.json, the {{data.greeting_en}} tells the jinja2 templating engine (https://jinja.palletsprojects.com/en/2.11.x/) to template the greeting_en column in the data.csv.
+
+The 'data' in {{data.greeting_en}} is globally available to the templating engine, and should always be included prior to the column you wish to access => {{data.column}}.
 
 ::
 
