@@ -2,7 +2,6 @@
 venv/
 *.pyc*
 *.egg-info
-examples/baseline
-examples/prepost
+examples/baseline*
+examples/prepost*
 examples/upwork.sh
-examples/*/out*
