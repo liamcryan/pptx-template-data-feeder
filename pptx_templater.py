@@ -34,9 +34,9 @@ def get_csv_data_file(filename):
               help='model object with .json or .xlsx format (required) -> jinja2 templating encouraged here')
 @click.option('--data', nargs=1, type=click.Path(exists=True), help='csv data file passed to model template')
 @click.option('--out', nargs=1, type=click.Path(exists=False), help='created pptx file (required)', required=True)
-@click.option('--skip-model-not-found/--raise', default=True, type=bool,
+@click.option('--skip-model-not-found/--raise', default=True,
               help='skip if specified key is not found in the model')
-@click.option('--debug/--live', default=False, type=bool, help='output verbose log')
+@click.option('--debug/--live', default=False, help='output verbose log')
 def cli(template, model_template, data, out, skip_model_not_found, debug):
     """
     When you need a template for your pptx-template
