@@ -6,8 +6,6 @@ When you need a template for your pptx-template.
 
 I wrote a blog post to help explain use cases: https://hellofrom.liamcryan.com/2020/12/pptx-templates-with-python.html
 
-If you are reading below and don't quite get it, you will need to familiarize with: https://github.com/m3dev/pptx-template
-
 A typical pptx-template model might look like this (model.json)::
 
     {
