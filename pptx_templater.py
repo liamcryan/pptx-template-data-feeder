@@ -2,11 +2,12 @@ import csv
 import logging
 import os
 import json
+import re
 
 from pptx import Presentation
 from pptx_template.cli import process_all_slides
 
-from jinja2 import FileSystemLoader, Environment
+from jinja2 import FileSystemLoader, Environment, Template
 import click
 
 log = logging.getLogger()
@@ -20,12 +21,9 @@ def get_model_template(filename):
 
 
 def get_csv_data_file(filename):
-    data = []
     with open(filename, 'rt') as f:
         reader = csv.DictReader(f)
-        for row in reader:
-            data.append(row)
-    return data
+        return list(reader)
 
 
 @click.command()
@@ -77,11 +75,16 @@ def cli(template, model_template, data, out, skip_model_not_found, debug):
     for i, elem in enumerate(data):
         # elem should be a dict or list
         # or a str == '0' (this happens when no --data is input - same behavior as ppt-template)
+        # ...this is kind of an odd way of doing things...
 
         log.info(f'{line}\nLoading pptx template: {template}')
         ppt = Presentation(template)
 
         log.info(f'Rendering model template {i}')
+        # [{date: '', 'name': '', 'company': ''}, ...
+        # let's instead of forcing user to specify data.column
+        # just specify column?
+
         rendered_model_template = model_template_.render(data=elem)
 
         # this model var passed directly to pptx-template cli
@@ -95,7 +98,20 @@ def cli(template, model_template, data, out, skip_model_not_found, debug):
         if elem == '0':
             out_file = out
         else:
-            out_file = out[:-5] + f'{i}' + out[-5:]
+            # here we want to look for jinja templating
+            # >>> import re
+            # >>> re.sub(r'{{([a-z]+)}}', r'{{elem.\1}}', 'my-output-file-{{name}}-{{company}}.pptx')
+            # 'my-output-file-{{elem.name}}-{{elem.company}}.pptx'
+            # # boo-yah! now we can pass to .render method of jinja2 Template object
+            output_file_template = Template(re.sub(r'{{([a-z]+)}}', r'{{elem.\1}}', out))
+            out_file = output_file_template.render(elem=elem)
+            if out == out_file:  # this means that user did not use output file templating
+                out_file = out[:-5] + f'{i}' + out[-5:]
 
         log.info(f'Saving pptx: {out_file}')
         ppt.save(out_file)
+
+
+if __name__ == '__main__':
+    a = get_model_template('model.json')
+    print('asdf')
