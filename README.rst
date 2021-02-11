@@ -23,7 +23,7 @@ A typical pptx-template model might look like this (model.json)::
 
     %pptx-template --template template.pptx --out out.pptx --model model.json
 
-Instead of specifying the fixed greetings within the model.json, we want to have a file of greetings and create an output pptx for each one.  This is very useful when you have multiple reports to be created with the same pptx template, but populated with different data.
+Instead of specifying the fixed greetings within the model.json, we want to have a file of greetings and create an output pptx for each one.  This is very useful when you have multiple reports to be created with the same pptx template, but populated with different 
 
 A pptx-templater model (model.json)::
 
@@ -31,14 +31,14 @@ A pptx-templater model (model.json)::
       "slides": {
         "1": {
           "greeting": {
-            "en": "{{data.greeting_en}}",
-            "ja": "{{data.greeitng_ja}}"
+            "en": "{{greeting_en}}",
+            "ja": "{{greeitng_ja}}"
           },
         },
 
     }
 
-Also needed is the data file (data.csv)::
+Also needed is the data file (csv)::
 
     greeting_ja,greeting_en
     こんにちは！,Hello!
@@ -46,14 +46,16 @@ Also needed is the data file (data.csv)::
 
 Please excuse my Japanese, ハウディ came from https://translate.google.com/#view=home&op=translate&sl=auto&tl=ja&text=Howdy
 
-In the model.json, the {{data.greeting_en}} tells the jinja2 templating engine (https://jinja.palletsprojects.com/en/2.11.x/) to template the greeting_en column in the data.csv.
-
-The 'data' in {{data.greeting_en}} is globally available to the templating engine, and should always be included prior to the column you wish to access => {{data.column}}.
+In the model.json, the {{greeting_en}} tells the jinja2 templating engine (https://jinja.palletsprojects.com/en/2.11.x/) to template the greeting_en column in the csv.
 
 ::
 
-    %pptx-templater --template template.pptx --out out.pptx --model-template model.json --data data.csv
+    %pptx-templater --template template.pptx --out out-{{greeting_en}}.pptx --model-template model.json --data csv
 
+Notice you can specify the format of the output file using jinja style bracketing.  In this example, the output files would be called::
+
+    out-Hello!.pptx
+    out-Howdy.pptx
 
 Getting started -> Python installation::
 
